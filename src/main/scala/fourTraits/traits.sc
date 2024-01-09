@@ -83,3 +83,48 @@ case class Square(size: Double) extends Shape {
   val perimeter = 4 * size
   val area = size * size
 }
+
+sealed trait Rectangular extends Shape {
+  def width: Double
+  def height: Double
+  val sides = 4
+  override val perimeter = 2 * width + 2 * height
+  override val area = width * height
+}
+
+case class Square1(size: Double) extends Rectangular {
+  val width = size
+  val height = size
+}
+
+case class Rectangle(val width: Double, val height: Double) extends Rectangular
+
+
+// NOTE: If all the subtypes of a trait are known, seal the trait,
+// consider making subtypes final if there is no case for extending them
+// SEALED TRAITS allows control extensibility of types, majority of cases should use SEALED/FINAL CASE CLASS pattern
+// ADVANTAGES:
+// Compiler will warn if we miss a case in pattern matching
+// Can control extension points of sealed traits and make stronger
+// guarantees about the behaviour of subtypes
+
+
+  // SEALED SHAPE EXERCISE
+
+ sealed trait NewShape {
+  def sides: Int
+  def perimeter: Double
+  def area: Double
+}
+
+object Draw {
+  def apply(shape: Shape): String = shape match {
+    case Rectangle(width, height) => s"A rectangle with a width of ${width} and a height of ${height}"
+    case Square(size) => s"A square of size ${size}cm"
+    case Circle(radius) => s"a circle with the radius ${radius}"
+  }
+}
+
+Draw(Circle(20))
+Draw(Square(30))
+Draw(Rectangle(30, 40))
